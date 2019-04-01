@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rand-pi
+spec:
+  template:
+    metadata:
+      annotations:
+        lsf.queue: "idle"
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(int(rand(50))*200+1)"]
+      restartPolicy: Never
+  backoffLimit: 4
+  completions: 100
+  parallelism: 16

@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-low
+spec:
+  template:
+    metadata:
+      annotations:
+        lsf.queue: "normal"
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(7500)"]
+      restartPolicy: Never
+  backoffLimit: 4
+  completions: 200
+  parallelism: 20
