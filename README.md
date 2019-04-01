@@ -7,3 +7,18 @@
 4. Run scripts for each scenario
 
 
+## Jenkins setup
+ 
+
+1. Deploy ICP ibm-jenkins-dev helm chart into each namespace
+2. Go to Manage Jenkins-> Configure System -> Cloud -> Kubernetes pod template and configure LSF annotations (eg. queue to target worker pods)
+3. Create a Jenkins project (New Item) to do compilation
+   - Git repo: https://github.com/antirez/redis.git
+   - Execute Shell:
+        apt-get update
+        apt-get install -y make
+        apt-get install -y gcc
+        make install
+   - Schedule: */5 * * * * 
+4. Create copies of the project to generate more pods
+
