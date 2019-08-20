@@ -6,7 +6,7 @@ spec:
   template:
     metadata:
       annotations:
-        lsf.queue: "priority"
+        lsf.ibm.com/queue: "priority"
     spec:
       containers:
       - name: pi

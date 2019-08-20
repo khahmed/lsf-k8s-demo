@@ -6,7 +6,7 @@ spec:
   template:
     metadata:
       annotations:
-        lsf.queue: "normal"
+        lsf.ibm.com/queue: "normal"
     spec:
       containers:
       - name: pi

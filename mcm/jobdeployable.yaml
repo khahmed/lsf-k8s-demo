@@ -1,0 +1,38 @@
+# Source: bioapp/templates/jobdeployable.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: release-name-bioapp-job
+  labels:
+    app: bioapp
+    chart: bioapp-0.1.0
+    release: release-name
+    heritage: Tiller
+    name: release-name-bioapp-job
+    servicekind: ApplicationJob
+    deployable-label: "passed-in"
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+spec:
+  template:
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: pi
+      namespace: default
+    spec:
+      template:
+        spec:
+          schedulerName: lsf
+          restartPolicy: Never
+          containers:
+          - name: pi
+            image: docker.io/perl
+            command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(10000)"]
+      backoffLimit: 4
+      completions: 1000
+      parallelism: 100
+  placement:
+    clusterSelector:
+      matchLabels:
+        region: EU

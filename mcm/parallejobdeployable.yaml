@@ -1,0 +1,54 @@
+# Source: bioapp/templates/jobdeployable.yaml
+apiVersion: app.ibm.com/v1alpha1
+kind: Deployable
+metadata:
+  name: release-name-parallelapp-job
+  labels:
+    app: parallelapp
+    chart: parallelapp-0.1.0
+    release: release-name
+    heritage: Tiller
+    name: release-name-parallelapp-job
+    servicekind: ApplicationJob
+    deployable-label: "passed-in"
+  annotations:
+    app.ibm.com/is-local-deployable: "false"
+spec:
+  template:
+    apiVersion: ibm.com/v1alpha1
+    kind: ParallelJob
+    metadata:
+      name: double-tasks-parallel
+      namespace: default
+      labels:
+         label1: example2
+    spec:
+      name: double-tasks-parallel
+      description: This is a parallel job with two tasks to be running on the same node.
+      headerTask: group0
+      priority: 100
+      schedulerName: lsf
+      taskGroups:
+      - metadata:
+          name: group0
+        spec:
+          placement:
+            spanTerms:
+            - topologyKey: node
+              taskTile: 2
+          replica: 2
+          template:
+            spec:
+              containers:
+              - args:
+                image: ubuntu
+                command: ["sleep", "30"]
+                name: task1
+                resources:
+                  limits:
+                    cpu: 1
+  placement:
+    clusterSelector: 
+      matchLabels: 
+        region: EU
+
